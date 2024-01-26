@@ -28,26 +28,49 @@ class DFTChatBot:
 			user_input = self.get_user_input()
 			if self.exit_bot( user_input ):
 				break
+			
+			if user_input.lower() == "yes" and "Are you ready to learn about Density Functional Theory?" in response_variable:
+				print("Chatbot: Great! Let's start.")
+				continue
 
 			response = chatbot.respond(user_input)
+			
 			if response:
 				print("Chatbot:", response)
-			if user_input == "no" and "Are you ready to learn about Density Functional Theory?" in response_variable:
+			negative_reply = ["no", "nope", "nah", "nahh"]
+			negative_DFT = ["Are you ready to learn about Density Functional Theory?", "I'm sorry, I didn't understand that. Are you interested in learning more about Density Functional Theory?"]
+			if  (user_input.lower() in negative_reply ) and ( i in response_variable for i in negative_DFT ):
 				print("I am sorry but I am only trained to talk about DFT. Goodbye!")
 				break
 
 			response_variable = response
 
+	def run_the_chat(self):
+		self.print_text()
+		instance = self.create_bot()
+		self.chat_with_bot(instance)
 
 if __name__ == "__main__":
+	#patterns = [
+	#	('Hi|hello|hey', ["Hi there! Are you ready to learn about Density Functional Theory?",
+	#						"Hello! Are you ready to learn about Density Functional Theory?",
+	#						"Hey! Are you ready to learn about Density Functional Theory?"])
+	#]
+	
 	patterns = [
-		(r'Hi|hello|hey', ["Hi there! Are you ready to learn about Density Functional Theory?",
-							"Hello! Are you ready to learn about Density Functional Theory?",
-							"Hey! Are you ready to learn about Density Functional Theory?"])
-	]
+        ('Hi|hello|hey', ["Hi there! Are you ready to learn about Density Functional Theory?",
+                         "Hello! Are you ready to learn about Density Functional Theory?",
+                         "Hey! Are you ready to learn about Density Functional Theory?"]),
+        ('What is DFT|Tell me about DFT|what is it about?|what is dft dealing with?', ["Density Functional Theory (DFT) is a quantum mechanical modeling method used in physics and chemistry to study the electronic structure of atoms and molecules. It is an approach for calculating the electronic properties of matter, such as energy and charge distribution. DFT is widely used in material science and condensed matter physics for predicting and understanding the properties of materials."]),
+        ('Applications of DFT|what are the applications of dft?|tell me more about it|dft applications', ["DFT is applied in various fields, including predicting material properties, studying chemical reactions, and understanding electronic structure. In material science, DFT is used to analyze and design new materials with specific properties. DFT is also employed in the study of biomolecules and their interactions."]),
+        ('Who developed DFT|who made it|who developed dft? who developed it?|developers?', ["DFT was developed by Walter Kohn and Pierre Hohenberg in 1964, for which they were awarded the Nobel Prize in Chemistry in 1998. Walter Kohn and Pierre Hohenberg laid the foundation for DFT in their seminal paper published in 1964."]),
+        ('quit|exit', ["Goodbye! If you have more questions in the future, feel free to ask.",
+                       "Farewell! If you ever want to learn more about DFT, don't hesitate to return."]),
+		('thanks|thank you|thank you very much|appreciate your help', ["You are very welcome"]),
+        ('', ["I'm sorry, I didn't understand that. Are you interested in learning more about Density Functional Theory?"])
+
+    ]
 
 	dft_bot = DFTChatBot(patterns)
-	dft_bot.print_text()
+	dft_bot.run_the_chat()
 
-	chatbot_instance = dft_bot.create_bot()
-	dft_bot.chat_with_bot(chatbot_instance)
