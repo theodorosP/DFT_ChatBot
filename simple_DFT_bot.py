@@ -23,27 +23,36 @@ class DFTChatBot:
 		return False
 
 	def chat_with_bot(self, chatbot):
-		response_variable = ""
+		previous_response = ""
 		while True:
+
 			user_input = self.get_user_input()
 			if self.exit_bot( user_input ):
 				break
+
+			positive_reply = ["yes", "yeah", "sure", "absolutely", "of course"]
+			DFT = ["Are you ready to learn about Density Functional Theory?", "I'm sorry, I didn't understand that. Are you interested in learning more about Density Functional Theory?"]
 			
-			if user_input.lower() == "yes" and "Are you ready to learn about Density Functional Theory?" in response_variable:
+			if ( user_input.lower() in positive_reply )  and ( previous_response == DFT[0] ):
 				print("Chatbot: Great! Let's start.")
 				continue
+			
+			if ( user_input.lower() in positive_reply )  and ( previous_response == DFT[1] ):
+				print("Chatbot: Great! Let's continue")
+				continue
 
+			
 			response = chatbot.respond(user_input)
 			
 			if response:
 				print("Chatbot:", response)
+			
 			negative_reply = ["no", "nope", "nah", "nahh"]
-			negative_DFT = ["Are you ready to learn about Density Functional Theory?", "I'm sorry, I didn't understand that. Are you interested in learning more about Density Functional Theory?"]
-			if  (user_input.lower() in negative_reply ) and ( i in response_variable for i in negative_DFT ):
+			if  (user_input.lower() in negative_reply ) and ( i in previous_response for i in DFT ):
 				print("I am sorry but I am only trained to talk about DFT. Goodbye!")
 				break
 
-			response_variable = response
+			previous_response = response
 
 	def run_the_chat(self):
 		self.print_text()
